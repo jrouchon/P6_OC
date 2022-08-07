@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 
-const apiRoutes = require('./routes/api.js'); //will be rename userRoutes 
+const userRoutes = require('./routes/userR.js');//will be rename userRoutes
+const sauceRoutes = require('./routes/saucesR.js');
 
 //mongodb connect
 const dbuser = process.env.DB_USER
@@ -24,9 +25,9 @@ mongoose.connect(`mongodb+srv://${dbuser}:${dbpasswd}@cluster0.v0vdoa1.mongodb.n
 app.use(cors())
 app.use(express.json());
 
-//change to a function and need to go in controler/user
-app.use('/api/auth', apiRoutes); ////will be rename userRoutes
-
+//routes
+app.use('/api/auth', userRoutes); 
+app.use('/api/sauces', sauceRoutes);
 
 
 

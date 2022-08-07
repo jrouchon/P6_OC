@@ -4,6 +4,6 @@ const router = express.Router();
 const userCtrl = require('../controllers/userAuth.js');
 
 router.post("/signup", userCtrl.signupUser);
-//router.post("/login", userCtrl.loginUser);
+router.post("/login", userCtrl.loginUser);
 
 module.exports = router;
