@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userR.js');//will be rename userRoutes
 const sauceRoutes = require('./routes/saucesR.js');
+const path = require('path');
 
 //mongodb connect
 const dbuser = process.env.DB_USER
@@ -28,6 +29,7 @@ app.use(express.json());
 //routes
 app.use('/api/auth', userRoutes); 
 app.use('/api/sauces', sauceRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 

@@ -3,7 +3,6 @@ const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 
 exports.signupUser = (req, res) => {
-    //console.log("signup request :", req.body);
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
@@ -11,15 +10,14 @@ exports.signupUser = (req, res) => {
                 password: hash
             });
             user.save()
-                .then((res) => console.log("user save ok", res)) //(() => res0status(201).json({ message: 'User created' }))
-                .catch((err) => console.log("user save fail", err)); //(error => res.status(400).json({ error }))
+                .then(() => res.status(201).json({ message: 'User created' }))
+                .catch(error => res.status(400).json({ error }))
 
         })
-        .catch((err) => console.log("user password hash failed", err)); //(error => res.status(500).json({ error }))
-    res.status(201).json({ message: 'User signed up' }); //si j'enlève cette ligne ça ne marche pas... mais pourquoi???
+        .catch(error => res.status(500).json({ error }));
 };
 
-exports.loginUser = (req, res) => { //pb si user signup need async await
+exports.loginUser = (req, res) => { 
     User.findOne({ email: req.body.email })
         .then(user => {
             if (user === null) {
@@ -34,7 +32,7 @@ exports.loginUser = (req, res) => { //pb si user signup need async await
                                 userId: user._id,
                                 token: jwt.sign( //need to change random token before prod
                                     { userId: user._id },
-                                    'RANDOM_TOKEN_SECRET',
+                                    'RANDOM_TOKEN',
                                     { expiresIn: '24h'}
                                 )
                             })
