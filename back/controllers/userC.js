@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 
+//
 exports.signupUser = (req, res) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -17,6 +18,8 @@ exports.signupUser = (req, res) => {
         .catch(error => res.status(500).json({ error }));
 };
 
+const tk = process.env.RD_TOKEN;
+
 exports.loginUser = (req, res) => { 
     User.findOne({ email: req.body.email })
         .then(user => {
@@ -30,9 +33,9 @@ exports.loginUser = (req, res) => {
                         } else {
                             res.status(200).json({
                                 userId: user._id,
-                                token: jwt.sign( //need to change random token before prod
+                                token: jwt.sign(
                                     { userId: user._id },
-                                    'RANDOM_TOKEN',
+                                    tk,
                                     { expiresIn: '24h'}
                                 )
                             })

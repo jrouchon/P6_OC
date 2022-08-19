@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 
-const userRoutes = require('./routes/userR.js');//will be rename userRoutes
+const userRoutes = require('./routes/userR.js');
 const sauceRoutes = require('./routes/saucesR.js');
 const path = require('path');
 

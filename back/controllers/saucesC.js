@@ -41,8 +41,8 @@ exports.modifySauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
             if (sauce.userId !== req.auth.userId) {
-                res.status(401).json({
-                    error: new Error(" Cette sauce n'est pas a vous ")
+                res.status(403).json({
+                    error: new Error(" unauthorized request ")
                 });
             } else {
                 const filename = sauce.imageUrl.split("/images/")[1];
@@ -63,8 +63,8 @@ exports.deleteSauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
             if (sauce.userId !== req.auth.userId) {
-                res.status(401).json({
-                    error: new Error(" Cette sauce n'est pas a vous ")
+                res.status(403).json({
+                    error: new Error("  unauthorized request ")
                 });
             }
 
