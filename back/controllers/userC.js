@@ -2,7 +2,9 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 
-//
+const tk = process.env.RD_TOKEN;
+
+//hash du mdp et sauvegarde en bdd du mdp hashé et de l'email
 exports.signupUser = (req, res) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -13,13 +15,11 @@ exports.signupUser = (req, res) => {
             user.save()
                 .then(() => res.status(201).json({ message: 'User created' }))
                 .catch(error => res.status(400).json({ error }))
-
         })
         .catch(error => res.status(500).json({ error }));
 };
 
-const tk = process.env.RD_TOKEN;
-
+//comparatif de l'email de la req avec les emails en bdd, puis comparatif des mdp et création du token d'identification
 exports.loginUser = (req, res) => { 
     User.findOne({ email: req.body.email })
         .then(user => {

@@ -7,6 +7,7 @@ exports.getSauces = (req, res) => {
         .catch(error => res.status(400).json({ error }))
 };
 
+//recuperation des info sur la sauce dans la req, ajout de l'id utilisateur de l'auth, enregistrement de la sauce en bdd
 exports.createSauce = (req, res) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
@@ -30,9 +31,9 @@ exports.getOneSauce = (req, res) => {
         .catch((error) => res.status(400).json({ error }));
 }
 
+//parse la req si c'est au format fichier, sinon on passe le body,
+//trouve la sauce et on verif l'id utilisateur, supprime l'ancienne image et on update l'objet avec les nouvelles info
 exports.modifySauce = (req, res) => {
-    
-
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
@@ -59,6 +60,7 @@ exports.modifySauce = (req, res) => {
         })
 }
 
+//trouve la sauce a supprimer, verif l'id utilisateur, supprime l'image du fichier images et on supprime la sauce en bdd
 exports.deleteSauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
@@ -81,8 +83,9 @@ exports.deleteSauce = (req, res) => {
         });
 };
 
-
-
+//trouve si la sauce a deja un like ou un dislike de cet utilisateur, si on doit ajouter un like on verif que la sauce n'est pas déjà liké,
+//si la sauce est déjà disliké on enleve le dislike et on ajoute un like, sinon on ajoute un like 
+//meme fonctionnement pour le dislike, on update la sauce
 exports.likeSauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
